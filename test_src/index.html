@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Testing Axios API Calls</title>
+    <title>File Upload</title>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -12,27 +12,52 @@
 <body>
     <div id="app">
         {{ info }}
-        <ul id="ex">
-            <li v-for="item in info">
+        <div v-for="item in info">
+            <div v-bind:style="{ marginBottom: '10', marginTop: '10', height: '100px', backgroundColor: item, padding: '15px'}">
                 {{ item }}
-            </li>
-
-        </ul>
-
+            </div>
+        </div>
+        
+        <div>
+            <button @click="submit"> Fetch Information </button>
+        </div>
+        {{ returnedURL }}
     </div>
 
     <script>
+        
+        
+
         new Vue ({
             el: '#app',
             data () {
                 return {
                     info: "",
+                    divStyle: {
+                        marginBottom: '10',
+                        marginTop: '10',
+                        height: '100px',
+                        backgroundColor: 'red'
+                    },
+                    returnedURL: "hello",
+                    query: "cats"
                 }
+            },
+            methods: {
+                submit: function(){
+                    // then scrapes
+                    axios.get('/getImages', { useCredentials: true }).then(() => {
+                        console.log("fetched");
+                    }).catch((e) => {
+                        console.log(e);
+                    })
+                }
+
             },
             mounted () {
                 //make a get request to the server to get the colors
                 axios.get('/getColors',{ useCredentials: true}).then((resp) => {
-                    console.log(typeof(resp.data))
+                    //console.log(typeof(resp.data))
                     this.info = resp.data;
                 }).catch((e) => {
                     console.log(e)

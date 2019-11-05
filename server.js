@@ -2,6 +2,7 @@ const express = require('express') //https version of express server
 const app = express();
 const path = require('path');
 const getColors = require('get-image-colors');
+const GoogleImageSearch = require('free-google-image-search');
 
 
 // pseudo information
@@ -15,7 +16,7 @@ const images = [
 
 console.log(__dirname);
 
-app.get('/getHTML', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile('index.html', {root: path.join(__dirname, './test_src')});
 })
 
@@ -27,13 +28,23 @@ app.get('/getHTML', (req, res) => {
 // we are going to work on quantizing information
 // specifically taking in a photo and 
 // and reducing the amount of colors in the photo
+
+// this getColors is called when the index.html is mounted onto the dom
 app.get('/getColors', (req, res) => {
-    getColors(path.join(__dirname, 'green_hair.jpg')).then(colors => {
+    getColors(path.join(__dirname, 'green_hair.jpg'), 5).then(colors => { // the 3 is the amount of colors I want
         // colors is an array of color objects
         var cs = colors.map(color => color.hex())
+        console.log(cs)
         res.send(cs)
         
     })
+});
+
+app.get('/getImages', (req, res) => {
+    GoogleImageSearch.searchImage("cats").then((res) => {
+        console.log(res);
+    })
+
 });
 
 
