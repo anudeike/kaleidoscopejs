@@ -21,7 +21,9 @@
         <div>
             <button @click="submit"> Fetch Information </button>
         </div>
-        {{ returnedURL }}
+        <div style="margin-top: 40px;">
+            <button @click="getSunsetColors"> Read From Sunset Pictures </button>
+        </div>
     </div>
 
     <script>
@@ -39,15 +41,23 @@
                         height: '100px',
                         backgroundColor: 'red'
                     },
-                    returnedURL: "hello",
                     query: "cats"
                 }
             },
             methods: {
                 submit: function(){
                     // then scrapes
-                    axios.get('/getImages', { useCredentials: true }).then(() => {
+                    axios.get('/showImages', { useCredentials: true }).then(() => {
                         console.log("fetched");
+                    }).catch((e) => {
+                        console.log(e);
+                    })
+                },
+
+                getSunsetColors: function(){
+                    console.log("success");
+                    axios.get("/getImages", {useCredentials: true}).then(() => {
+                        console.log("success");
                     }).catch((e) => {
                         console.log(e);
                     })
