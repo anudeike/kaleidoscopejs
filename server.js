@@ -17,6 +17,15 @@ admin.initializeApp({
     databaseURL: 'https://kaleidoscope-data.firebaseio.com'
 })
 
+// set up the realtime database access
+var db = admin.database();
+
+// this should be null but it is in the firebase docs
+var ref = db.ref("restricted_access/secret_document");
+ref.once("value", (snapshot) => {
+    console.log(snapshot.val());
+});
+
 app.get('/', (req, res) => {
     res.sendFile('index.html', {root: path.join(__dirname, './test_src')});
 })
