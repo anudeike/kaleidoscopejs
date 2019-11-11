@@ -1,0 +1,18 @@
+== Just a regular notes file ==
+
+Structuring JSON for Backend
+- Primary Goals are to:
+    1. Be able to search for colors based on queries
+    2. Be able to randomly get colors based on query
+    3. Be able to get the photos that each query is based on. (Not entirely sure about this one)
+
+- Issues
+    1. Not sure if attaching photos to each query is useful:
+        - more difficult coding wise
+        - will need to attach unique key to each query
+        - could help show where the colors are coming from 
+        - good for double checking logic
+        - not much need to double check logic because logic was not written by me?
+
+- JSON Structure: 
+    "query": [ hex_value, hex_value, hex_value ]

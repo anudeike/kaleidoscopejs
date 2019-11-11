@@ -21,10 +21,18 @@ admin.initializeApp({
 var db = admin.database();
 
 // this should be null but it is in the firebase docs
-var ref = db.ref("restricted_access/secret_document");
+var ref = db.ref();
 ref.once("value", (snapshot) => {
     console.log(snapshot.val());
 });
+
+// create a child reference 
+var queryRef = ref.child("queries");
+
+// add an example
+queryRef.set({
+    "example": ["#ffffff", "#a1ff0a", "#427deb"]
+})
 
 app.get('/', (req, res) => {
     res.sendFile('index.html', {root: path.join(__dirname, './test_src')});
@@ -42,7 +50,7 @@ app.get('/getColors', (req, res) => {
     })
 });
 
-app.get('/getImages', (req, res) => {
+app.get('/processImages', (req, res) => {
     //getImagePaths("sunset", res, getColorsFromImages) // get the images from the application
     //getAsyncPaths("sunset");
     var query = "sunset";
@@ -63,7 +71,8 @@ app.get('/getImages', (req, res) => {
             });
         }
 
-        console.log(color_matrix)
+        var merged = [].concat.apply([], color_matrix); //flatten the 2d array
+        console.log(merged);
     });
 });
 

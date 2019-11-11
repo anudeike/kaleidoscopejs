@@ -59,7 +59,7 @@
 
                 getSunsetColors: function(){
                     //console.log("success");
-                    axios.get("/getImages", {useCredentials: true}).then((resp) => {
+                    axios.get("/processImages", {useCredentials: true}).then((resp) => {
                         console.log("data: " + resp.data);
                     }).catch((e) => {
                         console.log(e);
