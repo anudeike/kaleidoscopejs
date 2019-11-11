@@ -4,13 +4,18 @@ const path = require('path');
 const getColors = require('get-image-colors');
 var glob = require("glob");
 var admin = require("firebase-admin");
-var serviceAccount = require(""); // path to the serviceCredentials go here
+
 
 // helps process .env
 require('dotenv').config();
 
-console.log(__dirname);
+//console.log(__dirname);
 
+// init firebase application
+admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    databaseURL: 'https://kaleidoscope-data.firebaseio.com'
+})
 
 app.get('/', (req, res) => {
     res.sendFile('index.html', {root: path.join(__dirname, './test_src')});
@@ -28,25 +33,6 @@ app.get('/getColors', (req, res) => {
     })
 });
 
-app.get('/showImages', (req, res) => {
-    // colors array
-    var colors_arr = []
-
-    // use glob to get the files
-    // can use pattern "python/downloads/{query}/*"
-
-    glob("python/downloads/sunset/*", (err, files) => {
-        if(err){
-            console.log(err);
-        }
-
-        if(files){
-            console.log(files);
-        }
-
-    })
-});
-
 app.get('/getImages', (req, res) => {
     //getImagePaths("sunset", res, getColorsFromImages) // get the images from the application
     //getAsyncPaths("sunset");
@@ -55,12 +41,6 @@ app.get('/getImages', (req, res) => {
     // sing async here with the await in the getColors
     // allows for blocking code - not node style but very useful for this case
     glob(`python/downloads/${query}/*`, async (err, files) => {
-
-        // files -> in the function success
-        if(files){
-            console.log("function success: ")
-        }
-
 
         var color_matrix = []
         console.log("\ngetColorsFromImages\n");
