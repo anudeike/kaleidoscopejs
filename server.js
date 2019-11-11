@@ -29,9 +29,12 @@ ref.once("value", (snapshot) => {
 // create a child reference 
 var queryRef = ref.child("queries");
 
-// add an example
-queryRef.set({
-    "example": ["#ffffff", "#a1ff0a", "#427deb"]
+// create a child ref of the queries ref which is a query
+var termRef = queryRef.child("example");
+
+// push an example
+termRef.push().set(["#ffffff", "#a1ff0a", "#427deb"], (err) => {
+    console.log(err)
 })
 
 app.get('/', (req, res) => {
