@@ -16,11 +16,15 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "firebase-admin": "^8.7.0",
     "free-google-image-search": "^1.0.0",
     "get-image-colors": "^2.0.0",
+    "get-image-pixels": "^1.0.1",
+    "get-rgba-palette": "^2.0.1",
     "glob": "^7.1.6",
     "googleapis": "^39.2.0",
     "https-localhost": "^4.4.1",
+    "img": "^3.0.3",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.4",
     "request": "^2.88.0"

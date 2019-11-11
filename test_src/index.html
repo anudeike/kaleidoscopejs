@@ -17,12 +17,14 @@
                 {{ item }}
             </div>
         </div>
-        
         <div>
             <button @click="submit"> Fetch Information </button>
         </div>
         <div style="margin-top: 40px;">
             <button @click="getSunsetColors"> Read From Sunset Pictures </button>
+        </div>
+        <div style="margin-top: 40px;">
+            <div> {{ matrix }} </div>
         </div>
     </div>
 
@@ -41,7 +43,8 @@
                         height: '100px',
                         backgroundColor: 'red'
                     },
-                    query: "cats"
+                    query: "cats",
+                    matrix: "",
                 }
             },
             methods: {
@@ -55,13 +58,13 @@
                 },
 
                 getSunsetColors: function(){
-                    console.log("success");
-                    axios.get("/getImages", {useCredentials: true}).then(() => {
-                        console.log("success");
+                    //console.log("success");
+                    axios.get("/getImages", {useCredentials: true}).then((resp) => {
+                        console.log("data: " + resp.data);
                     }).catch((e) => {
                         console.log(e);
                     })
-                }
+                },
 
             },
             mounted () {

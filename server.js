@@ -2,59 +2,14 @@ const express = require('express') //https version of express server
 const app = express();
 const path = require('path');
 const getColors = require('get-image-colors');
-const GoogleImageSearch = require('free-google-image-search');
 var glob = require("glob");
+var admin = require("firebase-admin");
+var serviceAccount = require(""); // path to the serviceCredentials go here
 
 // helps process .env
 require('dotenv').config();
 
 console.log(__dirname);
-
-/**
- * 
- * @param {Array} imagePaths
- * @param {int} numColors
- * @returns {Array} a double array of hex values 
- */
-function getColorsFromImages(imagePaths, numColors, callback){
-    var color_matrix = []
-    console.log("\ngetColorsFromImages\n");
-    //cycle thru each thing
-
-    imagePaths.forEach((path) => {
-        getColors(path, numColors).then(colors => {
-            var cs = colors.map(color => color.hex())
-            color_matrix.push(cs);
-            console.log(cs)
-        }).catch((err) => {
-            console.log(err);
-        })
-    })
-
-
-}
-
-/**
- * Returns a file path to all of the image files matching the query
- * @param {string} query a search term 
- * @returns {Array} files paths
- */
-function getImagePaths(query, callback){
-    console.log("running getImagePaths: ")
-    var paths  = []
-    glob(`python/downloads/${query}/*`, (err, files) => {
-
-        // files -> in the function success
-        if(files){
-            console.log("function success: ")
-            //console.log(files)
-        }
-
-        //use callback function here
-        return callback(files, 5);
-    });
-}
-
 
 
 app.get('/', (req, res) => {
@@ -93,7 +48,34 @@ app.get('/showImages', (req, res) => {
 });
 
 app.get('/getImages', (req, res) => {
-    var m = getImagePaths("sunset", getColorsFromImages) // get the images from the application
+    //getImagePaths("sunset", res, getColorsFromImages) // get the images from the application
+    //getAsyncPaths("sunset");
+    var query = "sunset";
+    
+    // sing async here with the await in the getColors
+    // allows for blocking code - not node style but very useful for this case
+    glob(`python/downloads/${query}/*`, async (err, files) => {
+
+        // files -> in the function success
+        if(files){
+            console.log("function success: ")
+        }
+
+
+        var color_matrix = []
+        console.log("\ngetColorsFromImages\n");
+
+        //just use a regular for loop
+        for(var i = 0; i < files.length; i++){
+            await getColors(files[i], 5).then((colors) => {
+                var cs = colors.map(color => color.hex())
+                color_matrix.push(cs);
+                console.log(cs)
+            });
+        }
+
+        console.log(color_matrix)
+    });
 });
 
 
