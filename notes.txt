@@ -15,4 +15,16 @@ Structuring JSON for Backend
         - not much need to double check logic because logic was not written by me?
 
 - JSON Structure: 
-    "query": [ hex_value, hex_value, hex_value ]
+    "query": {
+        "search_term": {
+            "key": [hex, hex, hex, hex]
+        }
+    }
+
+    - This JSON structure is easy to read and understand. It also is structured in a way that makes getting information particularly easy
+    - It is not speedy, when accessing the information, use batches instead of realtime updates.
+
+- TODO:
+    - Put the database insertion and update into their own function
+    - Create a client to be able to access the database
+    - Add it onto the Kaliedoscope Main client. 

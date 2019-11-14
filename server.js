@@ -20,22 +20,30 @@ admin.initializeApp({
 // set up the realtime database access
 var db = admin.database();
 
-// this should be null but it is in the firebase docs
-var ref = db.ref();
-ref.once("value", (snapshot) => {
-    console.log(snapshot.val());
-});
+// // this should be null but it is in the firebase docs
+// var ref = db.ref();
 
-// create a child reference 
-var queryRef = ref.child("queries");
+// // create a child reference 
+// var queryRef = ref.child("queries");
 
-// create a child ref of the queries ref which is a query
-var termRef = queryRef.child("example");
+// // create a child ref of the queries ref which is a query
+// var termRef = queryRef.child("example");
 
-// push an example
-termRef.push().set(["#ffffff", "#a1ff0a", "#427deb"], (err) => {
-    console.log(err)
-})
+// // push an example
+// termRef.push().set(["#ffffff", "#a1ff0a", "#427deb"], (err) => {
+//     console.log(err)
+// })
+
+//sends information to the database
+function sendToDatabase(db, query, info){
+    var ref = db.ref();
+    var queryRef = ref.child("queries");
+    var termRef = queryRef.child(query);
+
+    termRef.push().set(info, () => {
+        console.log("sent to database: ")
+    })
+}
 
 app.get('/', (req, res) => {
     res.sendFile('index.html', {root: path.join(__dirname, './test_src')});
@@ -53,14 +61,22 @@ app.get('/getColors', (req, res) => {
     })
 });
 
-app.get('/processImages', (req, res) => {
-    //getImagePaths("sunset", res, getColorsFromImages) // get the images from the application
-    //getAsyncPaths("sunset");
-    var query = "sunset";
+app.get('/processImages/:query', (req, res) => {
+
+    //get the query from the route
+    var query = req.params.query;
     
-    // sing async here with the await in the getColors
+    console.log(req.params.query);
+    
+    // set async here with the await in the getColors
     // allows for blocking code - not node style but very useful for this case
     glob(`python/downloads/${query}/*`, async (err, files) => {
+        
+        // if no files are found then send 404 to the front
+        if (files.length == 0){
+            res.status(404).send('Not Found in database');
+        }
+
 
         var color_matrix = []
         console.log("\ngetColorsFromImages\n");
@@ -76,10 +92,16 @@ app.get('/processImages', (req, res) => {
 
         var merged = [].concat.apply([], color_matrix); //flatten the 2d array
         console.log(merged);
+
+        //use insert in database function
+        sendToDatabase(db, query, merged);
     });
 });
 
-
+app.get('/sendParams/:query',(req, res) => {
+    var format = req.params.query
+    console.log(format);
+});
 
 
 const port = process.env.PORT || 8080;

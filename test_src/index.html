@@ -21,7 +21,8 @@
             <button @click="submit"> Fetch Information </button>
         </div>
         <div style="margin-top: 40px;">
-            <button @click="getSunsetColors"> Read From Sunset Pictures </button>
+            <input type="text" placeholder="enter query" v-model="query"/>
+            <button @click="getSunsetColors"> Get {{ query }} colors </button>
         </div>
         <div style="margin-top: 40px;">
             <div> {{ matrix }} </div>
@@ -30,8 +31,6 @@
 
     <script>
         
-        
-
         new Vue ({
             el: '#app',
             data () {
@@ -59,13 +58,31 @@
 
                 getSunsetColors: function(){
                     //console.log("success");
-                    axios.get("/processImages", {useCredentials: true}).then((resp) => {
+                    axios.get(`/processImages/${this.query}`, {useCredentials: true}).then((resp) => {
                         console.log("data: " + resp.data);
                     }).catch((e) => {
                         console.log(e);
                     })
                 },
 
+                sendParams: function(){
+                    axios.get(`/sendParams/${this.query}`, {useCredentials: true}).then((resp) => {
+                        console.log("data: " + resp.data)
+                    }).catch((e) => {
+                        console.log(e);
+                    })
+                }
+
+            },
+            computed: {
+                // whether input is valid
+                isValid: function() {
+                    if(query != ""){
+                        return true
+                    }
+
+                    return false
+                }
             },
             mounted () {
                 //make a get request to the server to get the colors
