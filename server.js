@@ -67,14 +67,16 @@ app.get('/processImages/:query', (req, res) => {
     var query = req.params.query;
     
     console.log(req.params.query);
-    
+
     // set async here with the await in the getColors
     // allows for blocking code - not node style but very useful for this case
-    glob(`python/downloads/${query}/*`, async (err, files) => {
+    glob(`./downloads/${query}/*`, async (err, files) => {
         
         // if no files are found then send 404 to the front
         if (files.length == 0){
             res.status(404).send('Not Found in database');
+            console.log(files)
+            return;
         }
 
 

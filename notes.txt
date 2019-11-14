@@ -25,6 +25,11 @@ Structuring JSON for Backend
     - It is not speedy, when accessing the information, use batches instead of realtime updates.
 
 - TODO:
-    - Put the database insertion and update into their own function
-    - Create a client to be able to access the database
+    - Put the database insertion and update into their own function (Done)
+    - Create a client to be able to access the database (Done)
+    - Decide if you want to add the preference photos
+    - Download a lot of photos and add them to the database (Done for the word 'sunrise')
+    - Make sure to regulate the size of photos to use because we have limited space
+    - display the returned colors in a table 
+        - use the bootstrap-vue table library https://bootstrap-vue.js.org/docs/components/table/
     - Add it onto the Kaliedoscope Main client. 
