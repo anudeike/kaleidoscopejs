@@ -52,10 +52,11 @@ app.get('/', (req, res) => {
 // this getColors is called when the index.html is mounted onto the dom
 // the 3 is the amount of colors I want
 app.get('/getColors', (req, res) => {
-    getColors(path.join(__dirname, 'green_hair.jpg'), 5).then(colors => { 
+    getColors(path.join(__dirname, 'nina-on-zora.jpg'), 10).then(colors => { 
         // colors is an array of color objects
         var cs = colors.map(color => color.hex())
         console.log(cs)
+        console.log(colors);
         res.send(cs)
         
     })
@@ -85,7 +86,7 @@ app.get('/processImages/:query', (req, res) => {
 
         //just use a regular for loop
         for(var i = 0; i < files.length; i++){
-            await getColors(files[i], 5).then((colors) => {
+            await getColors(files[i], 10).then((colors) => {
                 var cs = colors.map(color => color.hex())
                 color_matrix.push(cs);
                 console.log(cs)
