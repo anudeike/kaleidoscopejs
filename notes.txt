@@ -1,4 +1,13 @@
+AS OF 1/7/2020
+
+This project will be used as an endpoint for the main Kaliedoscope project.
+Some npm libraries do not work in the browser. They will be installed here instead 
+and the main project will just issue GET requests to this server.
+
+
+PRE 1/7/2020
 == Just a regular notes file ==
+
 
 Structuring JSON for Backend
 - Primary Goals are to:

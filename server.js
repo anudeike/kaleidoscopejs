@@ -1,10 +1,13 @@
 const express = require('express') //https version of express server
+var cors = require('cors');
 const app = express();
 const path = require('path');
 const getColors = require('get-image-colors');
 var glob = require("glob");
 var admin = require("firebase-admin");
 
+// use the cors module
+app.use(cors());
 
 // helps process .env
 require('dotenv').config();
@@ -62,6 +65,12 @@ app.get('/getColors', (req, res) => {
     })
 });
 
+// use this route for the main kaleidoscope project
+// idea is to get the image from the frontend, send it here, then return the colors
+app.get('/getColorsFromImage', (req, res) => {
+    res.send("accessed getColorsFromImage");
+})
+
 app.get('/processImages/:query', (req, res) => {
 
     //get the query from the route
@@ -107,5 +116,5 @@ app.get('/sendParams/:query',(req, res) => {
 });
 
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running at port: ${port}`));
