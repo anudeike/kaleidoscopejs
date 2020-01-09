@@ -7,6 +7,7 @@ var glob = require("glob");
 var admin = require("firebase-admin");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const fs = require("fs");
 
 // use the cors module
 app.use(cors());
@@ -75,7 +76,21 @@ app.get('/getColors', (req, res) => {
 
 // use this route for the main kaleidoscope project
 // idea is to get the image from the frontend, send it here, then return the colors
-app.post('/getColorsFromImage/', upload.single('file'), (req, res) => {
+app.post('/getColorsFromImage', upload.single('file'), (req, res) => {
+    var body = req.file;
+    const buffer = fs.readFileSync(path.join(__dirname, body.path));
+
+    console.log("Type for Body: " + typeof body)
+    
+    getColors(body.path, 10).then(colors => {
+        var cs = colors.map(color => color.hex());
+        console.log(cs);
+       // res.send(cs);
+    }).catch((e) => {
+        console.log(e);
+    });
+
+
     console.log('Got body: ', req.file);
     res.send(req.params.imageURL);
 })
