@@ -78,21 +78,24 @@ app.get('/getColors', (req, res) => {
 // idea is to get the image from the frontend, send it here, then return the colors
 app.post('/getColorsFromImage', upload.single('file'), (req, res) => {
     var body = req.file;
-    const buffer = fs.readFileSync(path.join(__dirname, body.path));
-
-    console.log("Type for Body: " + typeof body)
+    var counted = parseInt(req.body.colorAmount[req.body.colorAmount.length - 1])
+    console.log(counted);
     
-    getColors(body.path, 10).then(colors => {
+    getColors(body.path, {type: body.mimetype, count: counted}).then(colors => {
         var cs = colors.map(color => color.hex());
-        console.log(cs);
-       // res.send(cs);
+        console.log(colors);
+
+        // delete the binary file that was created
+        fs.unlinkSync(body.path);
+
+        // send back to the front end
+        res.send(colors);
     }).catch((e) => {
         console.log(e);
     });
 
-
-    console.log('Got body: ', req.file);
-    res.send(req.params.imageURL);
+    //console.log('Got body: ', req.file);
+    
 })
 
 app.get('/processImages/:query', (req, res) => {
