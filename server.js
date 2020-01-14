@@ -8,6 +8,7 @@ var admin = require("firebase-admin");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const fs = require("fs");
+const chroma = require("chroma-js");
 
 // use the cors module
 app.use(cors());
@@ -82,14 +83,23 @@ app.post('/getColorsFromImage', upload.single('file'), (req, res) => {
     console.log(req.body.colorAmount);
     
     getColors(body.path, {type: body.mimetype, count: counted}).then(colors => {
-        var cs = colors.map(color => color.hex());
-        console.log(cs);
+        //var cs = colors.map(color => color.hex());
+        //console.log(cs);
+
+        // order the colors in a way that makes sense
+        var hslcolors = colors.map(color => color.hsl());
+        hslcolors.sort();
+
+        // turn the hsl back into chroma-js objects
+        var chromaColors = hslcolors.map(c => chroma.hsl(c).hex())
+
+        console.log(chromaColors)
 
         // delete the binary file that was created
         fs.unlinkSync(body.path);
 
         // send back to the front end
-        res.send(cs);
+        res.send(chromaColors);
     }).catch((e) => {
         console.log(e);
     });
