@@ -24,14 +24,14 @@ require('dotenv').config();
 
 //console.log(__dirname);
 
-// init firebase application
-admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-    databaseURL: 'https://kaleidoscope-data.firebaseio.com'
-})
+// // init firebase application
+// admin.initializeApp({
+//     credential: admin.credential.applicationDefault(),
+//     databaseURL: 'https://kaleidoscope-data.firebaseio.com'
+// })
 
-// set up the realtime database access
-var db = admin.database();
+// // set up the realtime database access
+// var db = admin.database();
 
 // // this should be null but it is in the firebase docs
 // var ref = db.ref();
@@ -58,6 +58,7 @@ function sendToDatabase(db, query, info){
     })
 }
 
+// home route
 app.get('/', (req, res) => {
     res.sendFile('index.html', {root: path.join(__dirname, './test_src')});
 })
@@ -83,17 +84,16 @@ app.post('/getColorsFromImage', upload.single('file'), (req, res) => {
     console.log(req.body.colorAmount);
     
     getColors(body.path, {type: body.mimetype, count: counted}).then(colors => {
-        //var cs = colors.map(color => color.hex());
-        //console.log(cs);
+        // var cs = colors.map(color => color.hex());
+        // console.log(cs);
 
         // order the colors in a way that makes sense
         var hslcolors = colors.map(color => color.hsl());
         hslcolors.sort();
 
         // turn the hsl back into chroma-js objects
-        var chromaColors = hslcolors.map(c => chroma.hsl(c).hex())
-
-        console.log(chromaColors)
+        // saturating the colors that are given 
+        var chromaColors = hslcolors.map(c => chroma.hsl(c).saturate(1).hex())
 
         // delete the binary file that was created
         fs.unlinkSync(body.path);
