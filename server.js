@@ -65,16 +65,16 @@ app.get('/', (req, res) => {
 
 // this getColors is called when the index.html is mounted onto the dom
 // the 3 is the amount of colors I want
-app.get('/getColors', (req, res) => {
-    getColors(path.join(__dirname, 'nina-on-zora.jpg'), 10).then(colors => { 
-        // colors is an array of color objects
-        var cs = colors.map(color => color.hex())
-        console.log(cs)
-        console.log(colors);
-        res.send(cs)
+// app.get('/getColors', (req, res) => {
+//     getColors(path.join(__dirname, 'nina-on-zora.jpg'), 10).then(colors => { 
+//         // colors is an array of color objects
+//         var cs = colors.map(color => color.hex())
+//         console.log(cs)
+//         console.log(colors);
+//         res.send(cs)
         
-    })
-});
+//     })
+// });
 
 // use this route for the main kaleidoscope project
 // idea is to get the image from the frontend, send it here, then return the colors
@@ -108,49 +108,49 @@ app.post('/getColorsFromImage', upload.single('file'), (req, res) => {
     
 })
 
-app.get('/processImages/:query', (req, res) => {
+// app.get('/processImages/:query', (req, res) => {
 
-    //get the query from the route
-    var query = req.params.query;
+//     //get the query from the route
+//     var query = req.params.query;
     
-    console.log(req.params.query);
+//     console.log(req.params.query);
 
-    // set async here with the await in the getColors
-    // allows for blocking code - not node style but very useful for this case
-    glob(`./downloads/${query}/*`, async (err, files) => {
+//     // set async here with the await in the getColors
+//     // allows for blocking code - not node style but very useful for this case
+//     glob(`./downloads/${query}/*`, async (err, files) => {
         
-        // if no files are found then send 404 to the front
-        if (files.length == 0){
-            res.status(404).send('Not Found in database');
-            console.log(files)
-            return;
-        }
+//         // if no files are found then send 404 to the front
+//         if (files.length == 0){
+//             res.status(404).send('Not Found in database');
+//             console.log(files)
+//             return;
+//         }
 
 
-        var color_matrix = []
-        console.log("\ngetColorsFromImages\n");
+//         var color_matrix = []
+//         console.log("\ngetColorsFromImages\n");
 
-        //just use a regular for loop
-        for(var i = 0; i < files.length; i++){
-            await getColors(files[i], 10).then((colors) => {
-                var cs = colors.map(color => color.hex())
-                color_matrix.push(cs);
-                console.log(cs)
-            });
-        }
+//         //just use a regular for loop
+//         for(var i = 0; i < files.length; i++){
+//             await getColors(files[i], 10).then((colors) => {
+//                 var cs = colors.map(color => color.hex())
+//                 color_matrix.push(cs);
+//                 console.log(cs)
+//             });
+//         }
 
-        var merged = [].concat.apply([], color_matrix); //flatten the 2d array
-        console.log(merged);
+//         var merged = [].concat.apply([], color_matrix); //flatten the 2d array
+//         console.log(merged);
 
-        //use insert in database function
-        sendToDatabase(db, query, merged);
-    });
-});
+//         //use insert in database function
+//         sendToDatabase(db, query, merged);
+//     });
+// });
 
-app.get('/sendParams/:query',(req, res) => {
-    var format = req.params.query
-    console.log(format);
-});
+// app.get('/sendParams/:query',(req, res) => {
+//     var format = req.params.query
+//     console.log(format);
+// });
 
 
 const port = process.env.PORT || 5000;

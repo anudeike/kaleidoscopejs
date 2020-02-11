@@ -8,92 +8,40 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-        <!-- displays the information -->
-        {{ info }} 
-        <div v-for="item in info">
-            <div v-bind:style="{ marginBottom: '10', marginTop: '10', height: '100px', backgroundColor: item, padding: '15px'}">
-                {{ item }}
-            </div>
-        </div>
-        <div>
-            <button @click="submit"> Fetch Information </button>
-        </div>
-        <div style="margin-top: 40px;">
-            <input type="text" placeholder="enter query" v-model="query"/>
-            <button @click="getSunsetColors"> Get {{ query }} colors </button>
-        </div>
-        <div style="margin-top: 40px;">
-            <div> {{ matrix }} </div>
-        </div>
+        <v-app>
+            <v-content>
+                <v-container 
+                    class="fill-height"
+                    fluid>
+
+                     Hey, you've found our second server!  
+                </v-container>
+            </v-content>
+        </v-app>
     </div>
 
+    <!-- added vuetify -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
     <script>
-        
+        // vue object
         new Vue ({
             el: '#app',
+            vuetify: new Vuetify(),
             data () {
                 return {
                     info: "",
-                    divStyle: {
-                        marginBottom: '10',
-                        marginTop: '10',
-                        height: '100px',
-                        backgroundColor: 'red'
-                    },
-                    query: "cats",
                 }
             },
-            methods: {
-                submit: function(){
-                    // then scrapes
-                    axios.get('/showImages', { useCredentials: true }).then(() => {
-                        console.log("fetched");
-                    }).catch((e) => {
-                        console.log(e);
-                    })
-                },
-
-                getSunsetColors: function(){
-                    //console.log("success");
-                    axios.get(`/processImages/${this.query}`, {useCredentials: true}).then((resp) => {
-                        console.log("data: " + resp.data);
-                    }).catch((e) => {
-                        console.log(e);
-                    })
-                },
-
-                sendParams: function(){
-                    axios.get(`/sendParams/${this.query}`, {useCredentials: true}).then((resp) => {
-                        console.log("data: " + resp.data)
-                    }).catch((e) => {
-                        console.log(e);
-                    })
-                }
-
-            },
-            computed: {
-                // whether input is valid
-                isValid: function() {
-                    if(query != ""){
-                        return true
-                    }
-
-                    return false
-                }
-            },
-            mounted () {
-                //make a get request to the server to get the colors
-                axios.get('/getColors',{ useCredentials: true}).then((resp) => {
-                    //console.log(typeof(resp.data))
-                    this.info = resp.data;
-                }).catch((e) => {
-                    console.log(e)
-                })
-            }
-        })
+        });
     </script>
 </body>
 </html>
