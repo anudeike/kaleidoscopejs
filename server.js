@@ -93,7 +93,7 @@ app.post('/getColorsFromImage', upload.single('file'), (req, res) => {
 
         // turn the hsl back into chroma-js objects
         // saturating the colors that are given 
-        var chromaColors = hslcolors.map(c => chroma.hsl(c).saturate(1).hex())
+        var chromaColors = hslcolors.map(c => chroma.hsl(c).saturate(1).hex().toUpperCase())
 
         // delete the binary file that was created
         fs.unlinkSync(body.path);
